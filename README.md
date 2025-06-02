@@ -8,8 +8,6 @@ A Django REST API for credit approval system.
 - Background data ingestion from Excel files
 - Dockerized application with PostgreSQL and Redis
 
-## Quick Start
-
 ### Running the Application
 
 1. Clone the repository
@@ -17,7 +15,7 @@ A Django REST API for credit approval system.
 
 ```bash
 # Build and start all services
-docker-compose up --build
+docker compose up --build
 
 # Run database migrations
 docker compose exec web python manage.py migrate
@@ -26,7 +24,7 @@ docker compose exec web python manage.py migrate
 docker compose exec web python manage.py createsuperuser
 
 # Ingest data from Excel files
-docker-compose exec web python manage.py ingest_data
+docker compose exec web python manage.py ingest_data
 ```
 
 The API will be available at `http://localhost:8000/api/`
@@ -91,51 +89,3 @@ The system calculates credit scores based on:
 - Credit score 10-30: Approve with interest rate ≥ 16%
 - Credit score < 10: Reject loan
 - Total EMIs > 50% of salary: Reject loan
-
-## Development
-
-### Running Tests
-```bash
-docker-compose exec web python manage.py test
-```
-
-### Accessing Admin Panel
-Visit `http://localhost:8000/admin/` (create superuser first)
-
-### Celery Monitoring
-Check celery logs:
-```bash
-docker-compose logs celery
-```
-
-## Architecture
-
-- **Django 4.2**: Web framework
-- **Django REST Framework**: API development
-- **PostgreSQL**: Primary database
-- **Redis**: Message broker for Celery
-- **Celery**: Background task processing
-- **Docker**: Containerization
-
-## File Structure
-```
-credit_approval_system/
-├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
-├── manage.py
-├── credit_system/          # Django project settings
-├── credit_app/             # Main application
-├── data/                   # Excel data files
-└── README.md
-
-
-
-
-# Clean slate approach
-docker compose down
-docker volume rm credit_approval_system_postgres_data
-docker compose up --build
-docker compose exec web python manage.py migrate
-docker compose exec web python manage.py ingest_data
-docker compose exec web python manage.py fix_sequences
